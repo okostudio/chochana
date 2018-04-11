@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CHOCHANA Swimwear</title>
+    <!-- Don't scale -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,500,700" rel="stylesheet">
+    <link href="/assets/css/chochana.css" rel="stylesheet">
+    <link href="/assets/css/shop.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenMax.min.js" integrity="sha256-S6G5lg9rzC1JCAkx3dQFqP2lefkFxwlNVn0rWCOueXA="
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="/assets/js/nano.js"></script>
+    <script type="text/javascript" src="/assets/js/maps.js"></script>
+    <script type="text/javascript" src="/assets/js/gen_validatorv4.js"></script>
+
+    <!-- <script src="http://sdks.shopifycdn.com/js-buy-sdk/v0/latest/shopify-buy.umd.polyfilled.min.js"></script> -->
+</head>
+
+<body>
+    
+    <!-- == PROMO ============= -->
+    <section class="promo">
+        <div class="container">
+            <p>Env&Iacute;os a todo el pa&Iacute;s
+                <strong>sin costo!</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- == NAV ============= -->
+    <section class="nav">
+        <div class="container">
+            <div class="logo" page="home"></div>
+            <div class="login">
+                <div class="login-button">Sign in</div>
+                <div class="shopping-bag"></div>
+            </div>
+            <ul>
+                <li class="" page="shop">Tienda</li>
+                <li class="" page="stores">Locales</li>
+                <li class="" page="campaign">Campa&ntilde;a</li>
+                <li class="" page="contact">Contacto</li>
+            </ul>
+            <div class="underline"></div>
+        </div>
+    </section>
+
+    <!-- == HERO ============= -->
+    <section class="hero">
+        <div class="slideshow">
+            <div class="slide slide1"></div>
+            <div class="slide slide2"></div>
+        </div>
+        <!-- <div class="button noselect">CAMPAIGN <strong>2016</strong><div class="hitarea" page="campaign"></div> -->
+        </div>
+        <div class="container"></div>
+    </section>
+
+    <!-- == CAMPAIGN ============= -->
+    <section class="campaign">
+
+    </section>
+
+    <!-- == SHOP ============================= -->
+    <section class="shop">
+        <div class="container">
+            <h1>Tienda</h1>
+            <div class="results-count">Results: 0</div>
+            <div class="filters">
+                <div class="filter type">
+                    <div class="heading">Tipo de Producto</div>
+                    <div class="select">Bikini</div>
+                    <div class="select">Malla</div>
+                </div>
+                <div class="filter colour">
+                    <div class="heading">Color</div>
+                </div>
+                <div class="filter size">
+                    <div class="heading">Talle</div>
+                    <div class="select">Sml</div>
+                    <div class="select">Med</div>
+                    <div class="select">Lrg</div>
+                </div>
+            </div>
+            <div class="products shop-items" id="shop-items"></div>
+        </div>
+    </section>
+
+    <!-- == PRODUCT ============================= -->
+    <section class="product-page">
+        <div class="container">
+            <div class="slideshow">
+                <div class="image">
+                    <div class="zoom"></div>
+                    <div class="hitarea"></div>
+                    <div class="nav"></div>
+                </div>
+            </div>
+            <div class="description">
+
+            </div>
+        </div>
+        <div class="close no-select">&times;</div>
+    </section>
+
+
+    <!-- .cart-tab start -->
+    <button class="btn btn--cart-tab js-prevent-cart-listener">
+        <span class="btn__counter"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon-cart icon-cart--side" viewBox="0 0 25 25" enable-background="new 0 0 25 25">
+            <g fill="#fff">
+                <path d="M24.6 3.6c-.3-.4-.8-.6-1.3-.6h-18.4l-.1-.5c-.3-1.5-1.7-1.5-2.5-1.5h-1.3c-.6 0-1 .4-1 1s.4 1 1 1h1.8l3 13.6c.2 1.2 1.3 2.4 2.5 2.4h12.7c.6 0 1-.4 1-1s-.4-1-1-1h-12.7c-.2 0-.5-.4-.6-.8l-.2-1.2h12.6c1.3 0 2.3-1.4 2.5-2.4l2.4-7.4v-.2c.1-.5-.1-1-.4-1.4zm-4 8.5v.2c-.1.3-.4.8-.5.8h-13l-1.8-8.1h17.6l-2.3 7.1z"></path>
+                <circle cx="9" cy="22" r="2"></circle>
+                <circle cx="19" cy="22" r="2"></circle>
+            </g>
+        </svg>
+    </button>
+    <!-- .cart-tab end -->
+
+
+    <!-- .cart begin -->
+    <div class="cart">
+
+        <!-- .cart-section begin // cart header -->
+        <div class="cart-section cart-section--top">
+            <h2 class="cart-title">Your cart</h2>
+            <button class="btn--close">
+                <span aria-role="hidden">&times;</span>
+                <span class="visuallyhidden">Close</span>
+            </button>
+        </div>
+        <!-- .cart-section end -->
+
+        <!-- .cart-form begin // cart body -->
+        <div class="cart-form">
+            <div class="cart-item-container cart-section">
+
+            </div>
+
+            <!-- .cart-bottom begin -->
+            <div class="cart-bottom">
+                <div class="cart-info clearfix cart-section">
+                    <div class="type--caps cart-info__total cart-info__small">Total</div>
+                    <div class="cart-info__pricing">
+                        <span class="cart-info__small cart-info__total">USD</span>
+                        <span class="pricing pricing--no-padding"></span>
+                    </div>
+                </div>
+                <div class="cart-actions-container cart-section type--center">
+                    <div class="cart-discount-notice cart-info__small">Shipping and discount codes are added at checkout.</div>
+                    <input type="submit" class="btn btn--cart-checkout" id="checkout" name="checkout" value="Checkout">
+                </div>
+            </div>
+            <!-- .cart-bottom end -->
+
+        </div>
+        <!-- .cart-form end -->
+
+    </div>
+    <!-- .cart end -->
+
+    <script id="CartItemTemplate" type="text/template">
+        <div class="cart-item">
+            <div class="cart-item__img"></div>
+            <div class="cart-item__content">
+                <div class="cart-item__content-row">
+                    <div class="cart-item__variant-title"></div>
+                    <span class="cart-item__title"></span>
+                </div>
+                <div class="cart-item__content-row">
+                    <div class="cart-item__quantity-container">
+                        <button class="btn--seamless quantity-decrement" type="button">
+                            <span>-</span>
+                            <span class="visuallyhidden">Decrement</span>
+                        </button>
+                        <input class="cart-item__quantity" type="number" min="0" aria-label="Quantity">
+                        <button class="btn--seamless quantity-increment" type="button">
+                            <span>+</span>
+                            <span class="visuallyhidden">Increment</span>
+                        </button>
+                    </div>
+                    <span class="cart-item__price"></span>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!-- == STORE LOCATOINS =================== -->
+    <section class="stores">
+        <div class="container">
+            <div class="copy">
+                <h1>Locales</h1>
+            </div>
+            <div class="store col3">
+                <h3>
+                    <b>San Clemente,</b> Punta Carretas</h3>
+                <div class="map-holder sanclemente">
+                    <div id="map1" class="map"></div>
+                    <div class="map-footer"></div>
+                </div>
+                <ul class="details">
+                    <li class="address">
+                        <span></span>Ellauri 885, Punta Carretas</li>
+                    <li class="phone">
+                        <span></span>2710 7187</li>
+                    <li class="hours">
+                        <span></span>Lunes a S&aacute;bado de 11:00 a 20:00hs</li>
+                </ul>
+            </div>
+
+            <div class="store col3">
+                <h3>
+                    <b>Petra,</b> La Barra</h3>
+                <div class="map-holder petra">
+                    <div id="map2" class="map"></div>
+                    <div class="map-footer"></div>
+                </div>
+                <ul class="details">
+                    <li class="address">
+                        <span></span>Ruta 10 esquina Ensue&ntilde;os, Punta del Este</li>
+                    <li class="hours">
+                        <span></span>Lunes a S&aacute;bado de 10:00 a 20:30hs
+                        <br> Domingo de 11:00 a 18:00</li>
+                </ul>
+            </div>
+
+            <div class="store col3">
+                <h3>
+                    <b>Casa Banem,</b> Carrasco</h3>
+                <div class="map-holder casaBanem">
+                    <div id="map3" class="map"></div>
+                    <div class="map-footer"></div>
+                </div>
+                <ul class="details">
+                    <li class="address">
+                        <span></span>6456, Esteban A. Elena, 11500 Montevideo</li>
+                    <li class="phone">
+                        <span></span>2600 1057</li>
+                    <li class="hours">
+                        <span></span>Lunes a S&aacute;bado de 9:00 a 18:30hs
+                        <br> Domingo de 11:00 a 14:00</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- == INSTAGRAM =================== -->
+    <section class="instagram">
+        <div class="container">
+            <h1>Seguinos</h2>
+            <div class="posts large col2"></div>
+            <div class="posts small col2"></div>
+        </div>
+    </section>
+
+    <!-- == CONTACT =================== -->
+    <section class="contact">
+        <div class="container">
+
+            <div class="col2">
+                <h1>Contacto</h1>
+                <p>Llena&#769; este formulario y nos pondremos en contacto lo antes posible</p>
+                <div class="grid">
+                    <div class="col4">
+                        <h2></h2>
+                        <p></p>
+                    </div>
+                    <div class="col4">
+                        <h2></h2>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col2">
+                <form action="contact-form-handler.php" method="POST" enctype="multipart/form-data" class="contact-form" name="contact-form">
+                    <div class="email-confirmation thanks">
+                        <h2>Gracias!</h2>
+                        <p>Your email has been sent succesfully.
+                            <br> We'll get back to you as soon as possible.</p>
+                    </div>
+                    <div class="contact-form-input your-name">
+                        <input type="text" name="your_name" value="" size="40" placeholder="Nombre">
+                    </div>
+                    <div class="contact-form-input your-email">
+                        <input type="text" name="your_email" value="" size="40" placeholder="Email">
+                    </div>
+                    <div class="contact-form-input your-subject">
+                        <input type="text" name="your_subject" value="" size="40" placeholder="Asunto">
+                    </div>
+                    <div class="contact-form-input your-message">
+                        <textarea name="your_message" cols="40" rows="10" placeholder="Mensage"></textarea>
+                    </div>
+                    <p>
+                        <input type="submit" value="ENVIAR" class="submit">
+                    </p>
+                </form>
+            </div>
+        </div>
+        <div class="close no-select">&times;</div>
+    </section>
+
+
+    <section class="footer">
+        <p class="copyright">Derechos de autor &copy; 2018 Chochana Ltd.</p>
+
+        <ul class="social">
+            <li class="icon facebook"></li>
+            <li class="icon instagram"></li>
+        </ul>
+
+        <ul class="payment-partners">
+            <li class="icon amex"></li>
+            <li class="icon master"></li>
+            <li class="icon visa"></li>
+        </ul>
+    </section>
+
+
+    <!-- <script src="shop.js"></script>   -->
+    <script src="/assets/js/main.js"></script>
+</body>
+
+</html>

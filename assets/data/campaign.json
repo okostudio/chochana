@@ -1,0 +1,67 @@
+[
+  {
+    "Campaign": 2016,
+    "Image": "campaign_2016_01.jpg",
+    "Columns": 2
+  },
+  {
+    "Campaign": 2016,
+    "Image": "campaign_2016_03.jpg",
+    "Columns": 2
+  },
+  {
+    "Campaign": 2016,
+    "Image": "campaign_2016_02.jpg",
+    "Columns": 2
+  },
+  {
+    "Campaign": 2016,
+    "Image": "campaign_2016_04.jpg",
+    "Columns": 2
+  },
+  {
+    "Campaign": 2016,
+    "Image": "campaign_2016_06.jpg",
+    "Columns": 1
+  },
+  {
+    "Campaign": 2016,
+    "Image": "campaign_2016_05.jpg",
+    "Columns": 1
+  },
+  {
+    "Campaign": 2015,
+    "Image": "campaign_2015_00.jpg",
+    "Columns": 1
+  },
+  {
+    "Campaign": 2015,
+    "Image": "campaign_2015_01.jpg",
+    "Columns": 2
+  },
+  {
+    "Campaign": 2015,
+    "Image": "campaign_2015_02.jpg",
+    "Columns": 2
+  },
+  {
+    "Campaign": 2015,
+    "Image": "campaign_2015_06.jpg",
+    "Columns": 1
+  },
+  {
+    "Campaign": 2015,
+    "Image": "campaign_2015_03.jpg",
+    "Columns": 1
+  },
+  {
+    "Campaign": 2015,
+    "Image": "campaign_2015_04.jpg",
+    "Columns": 1
+  },
+  {
+    "Campaign": 2015,
+    "Image": "campaign_2015_05.jpg",
+    "Columns": 1
+  }
+]
