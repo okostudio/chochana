@@ -11,7 +11,10 @@ let doc = {
 	productShowing: false,
 	previousPage: '',
 	Title: 'CHOCHANA Swimwear',
-	previousPage: { Title: 'CHOCHANA Swimwear', Url: '/' }
+	previousPage: {
+		Title: 'CHOCHANA Swimwear',
+		Url: '/'
+	}
 }
 
 function init() {
@@ -28,6 +31,10 @@ function init() {
 		updateShopFilters();
 		populateInstagram();
 
+		console.log(">> INIT 3.02")
+		initSlideShow('.hero .slideshow', 'slide');
+		initSlideShow('.instagram .posts.large', 'fade');
+
 		addListeners();
 	});
 
@@ -36,8 +43,6 @@ function init() {
 		doc.campaignData = data;
 		console.log(data)
 	});
-
-	initSlideShow('.hero .slideshow');
 
 	from('.promo', 0.3, { alpha: 0 }, 'in', 0.1);
 	from('.nav', 0.3, { alpha: 0 }, 'in', 0.1);
@@ -55,7 +60,7 @@ function init() {
 		$('section.stores').show();
 		$('section.instagram').show();
 		$('section.footer').show();
-		set('section.contact', { opacity: 0, display: 'none' })
+		set('section.contact', {opacity: 0, display: 'none' })
 
 		checkUrlQueries();
 	});
@@ -248,47 +253,67 @@ function productClick(e) {
 //	SLIDESHOW CONTROLS
 //
 //////////////////////////////////////////////////////////////////////
-function initSlideShow(el, transition="slide") {
+function initSlideShow(el, transition) {
+	if (!transition) transition = 'slide';
 	let slideShow = {
 		container: $(el),
+		target: $(el + ' .slide'),
 		length: $(el + ' .slide').length,
-		currentSlide: 1,
-		previousSlide: 1,
-		zIndex: 0,
+		current: 1,
+		previous: 1,
 		transition: transition
 	}
+	console.log(slideShow)
 
 	if (slideShow.transition == "slide") {
 		$(el + ' .slide').hide();
 		set($(el + ' .slide'), { x: 0 })
-		$($(el + ' .slide')[slideShow.currentSlide - 1]).show();
+		$($(el + ' .slide')[slideShow.current - 1]).show();
 	}
-	
-	function changeSlide() {
-		console.log(slideShow)
+	if (slideShow.transition == "fade") {
+		set(slideShow.target, { alpha: 0 })
+		set($(slideShow.target[0]), { alpha: 1 });
+	}
 
+	function changeSlide() {
+		// update previous slide n
+		slideShow.previous = slideShow.current;
+		if (slideShow.current < slideShow.length) {
+			slideShow.current++
+		} else {
+			slideShow.current = 1;
+		}
+
+		// define current and previous slides
+		const newSlide = slideShow.target[slideShow.current - 1];
+		const oldSlide = slideShow.target[slideShow.previous - 1];
+		
+		
+		// if Sliding in from side
 		if (slideShow.transition == "slide") {
 			const slideWidth = $(el + ' .slide').width();
-			slideShow.previousSlide = slideShow.currentSlide;
-
-			if (slideShow.currentSlide < slideShow.length) {
-				slideShow.currentSlide++
-			} else {
-				slideShow.currentSlide = 1;
-			}
-
-			const newSlide = $(el + ' .slide')[slideShow.currentSlide-1];
-			const oldSlide = $(el + ' .slide')[slideShow.previousSlide-1];
 
 			set(newSlide, { x: 0 })
 			from(newSlide, 1.0, { x: slideWidth }, 'inOut')
 			to(oldSlide, 1.0, { x: -slideWidth }, 'inOut')
-
-			wait(6, changeSlide)
 		}
-	}
 
-	wait(5, changeSlide)
+		// if Fading in / out
+		if (slideShow.transition == "fade") {
+			set(el + ' .slide', { alpha: 0 })
+			set(newSlide, { alpha: 1 })
+			set(oldSlide, { alpha: 1 })
+
+			if (slideShow.current == 1) {
+				to(oldSlide, 1.0, { alpha: 0 }, 'in')
+			} else {
+				from(newSlide, 1.0, { alpha: 0 }, 'in')
+			};
+		}
+
+		wait(3, changeSlide)
+	}
+	wait(3, changeSlide)
 }
 
 function checkUrlForTags() {
@@ -298,7 +323,10 @@ function checkUrlForTags() {
 		if (urlTags[1] == "thanks") {
 			scrollPageTo('.thanks')
 			$('.email-confirmation').show();
-			from('.thanks', 0.5, { y: 20, alpha: 0 }, 'out', 0.33);
+			from('.thanks', 0.5, {
+				y: 20,
+				alpha: 0
+			}, 'out', 0.33);
 		}
 	}
 }
@@ -351,7 +379,10 @@ function ChangeUrl(title, url) {
 			doc.previousPage.Title = title;
 			doc.previousPage.Url = url;
 		}
-		var obj = { Title: title, Url: url };
+		var obj = {
+			Title: title,
+			Url: url
+		};
 		history.pushState(obj, obj.Title, obj.Url);
 	} else {
 		alert("Browser does not support HTML5.");
@@ -371,13 +402,16 @@ function toggleNav(e) {
 function navExpand(e) {
 	$('.nav').addClass('navShadow')
 	var navHeight = $('.nav ul li').length * parseInt($('.nav ul li').css('height'));
-	to('.nav ul', 0.4, { height: navHeight }, 'inOut');
+	to('.nav ul', 0.4, {
+		height: navHeight
+	}, 'inOut');
 	doc.navToggled = true;
 }
 
 function navCollapse(e) {
 	to('.nav ul', 0.3, {
-		height: 0, onComplete: function () {
+		height: 0,
+		onComplete: function () {
 			doc.navToggled = false;
 			$('.nav').removeClass('navShadow')
 		}
@@ -391,13 +425,15 @@ function scrollPageTo(el, time = 0.5, vars = {}) {
 	wait(vars.scrollDelay, function () {
 		doc.scroll = $(document).scrollTop();
 		let offsetY = 0;
-		if ($.isNumeric(el)){
+		if ($.isNumeric(el)) {
 			offsetY = el;
 		} else {
 			offsetY = doc.scroll + $(el)[0].getBoundingClientRect().top - 100;
 		}
 		TweenLite.to(doc, time, {
-			scroll: Math.round(offsetY), ease: vars.ease, onUpdate: function () {
+			scroll: Math.round(offsetY),
+			ease: vars.ease,
+			onUpdate: function () {
 				$(document).scrollTop(doc.scroll)
 			}
 		})
@@ -428,15 +464,21 @@ function navSelect(e) {
 	switch (page) {
 		case 'home':
 			ChangeUrl(doc.Title + '', '/');
-			to('.nav .underline', 0.3, {width: 0 }, 'out')
+			to('.nav .underline', 0.3, {
+				width: 0
+			}, 'out')
 			scrollPageTo(0, 0.5);
 			break;
 		case 'shop':
-			scrollPageTo('.shop', 0.5, { scrollDelay: scrollDelay });
+			scrollPageTo('.shop', 0.5, {
+				scrollDelay: scrollDelay
+			});
 			ChangeUrl(doc.Title + ' : Shop', '/?page=' + page)
 			break;
 		case 'stores':
-			scrollPageTo('.stores', 0.5, { scrollDelay: scrollDelay });
+			scrollPageTo('.stores', 0.5, {
+				scrollDelay: scrollDelay
+			});
 			ChangeUrl(doc.Title + ' : Locales', '/?page=stores')
 			break;
 		case 'campaign':
@@ -445,7 +487,8 @@ function navSelect(e) {
 		case 'contact':
 			toggleContact();
 			break;
-		default: break;
+		default:
+			break;
 	}
 }
 
@@ -454,30 +497,51 @@ function toggleContact() {
 	if (doc.contactShowing) {
 		ChangeUrl(doc.Title + '', '/')
 		doc.contactShowing = false;
-		to('.contact', 0.4, { opacity: 0 }, 'out')
+		to('.contact', 0.4, {
+			opacity: 0
+		}, 'out')
 		to('.contact .container', 0.4, {
-			y: '-100%', onComplete: () => {
-				set('.contact', { display: 'none' })
+			y: '-100%',
+			onComplete: () => {
+				set('.contact', {
+					display: 'none'
+				})
 			}
 		}, 'out')
 	} else {
 		ChangeUrl(doc.Title + ' : Contact', '/?page=contact')
 		doc.contactShowing = true;
-		set('.contact', { opacity: 1, display: 'block' })
-		set('.contact .container', { y: "0%" })
-		from('.contact', 0.4, { opacity: 0 }, 'out')
-		from('.contact .container', 0.4, { y: '-100%' }, 'out')
+		set('.contact', {
+			opacity: 1,
+			display: 'block'
+		})
+		set('.contact .container', {
+			y: "0%"
+		})
+		from('.contact', 0.4, {
+			opacity: 0
+		}, 'out')
+		from('.contact .container', 0.4, {
+			y: '-100%'
+		}, 'out')
 	}
 }
 
 function hideProductPage() {
 	ChangeUrl(doc.Title, '/')
 	doc.productShowing = false;
-	to('.product-page', 0.2, { opacity: 0 }, 'in')
+	to('.product-page', 0.2, {
+		opacity: 0
+	}, 'in')
 	to('.product-page .container', 0.2, {
-		y: '-33%', onComplete: () => {
-			set('.product-page', { display: 'none' });
-			set('.product-page .hitarea', { display: 'none' });
+		y: '-33%',
+		onComplete: () => {
+			set('.product-page', {
+				display: 'none'
+			});
+			set('.product-page .hitarea', {
+				display: 'none'
+			});
 		}
 	}, 'in')
 }
@@ -490,12 +554,21 @@ function toggleProductPage(productId) {
 			ChangeUrl(doc.Title + ' : Product', '/?page=product&id=' + productId)
 			populateProductPage(productId);
 		}
-		set('.product-page', { opacity: 1, display: 'block' })
-		set('.product-page .container', { y: "0%" })
+		set('.product-page', {
+			opacity: 1,
+			display: 'block'
+		})
+		set('.product-page .container', {
+			y: "0%"
+		})
 
 		if (!doc.productShowing) {
-			from('.product-page', 0.4, { opacity: 0 }, 'out')
-			from('.product-page .container', 0.4, { y: '20%' }, 'out')
+			from('.product-page', 0.4, {
+				opacity: 0
+			}, 'out')
+			from('.product-page .container', 0.4, {
+				y: '20%'
+			}, 'out')
 		}
 		doc.productShowing = true;
 		verticallyCenterProductPage();
@@ -523,8 +596,12 @@ function populateProductPage(productId) {
 
 	// POPULATE PRODUCT =======================
 	// -- slideshow image ---
-	$('.product-page .slideshow .image').css({ backgroundImage: `url(/assets/images/pose/${product.Front_Image_Url})` })
-	$('.product-page .slideshow .zoom').css({ backgroundImage: `url(/assets/images/pose/${product.Front_Image_Url})` })
+	$('.product-page .slideshow .image').css({
+		backgroundImage: `url(/assets/images/pose/${product.Front_Image_Url})`
+	})
+	$('.product-page .slideshow .zoom').css({
+		backgroundImage: `url(/assets/images/pose/${product.Front_Image_Url})`
+	})
 	// -- check for other slideshow images -------
 	if (product.Product_Image_Url.length > 1) {
 
@@ -581,13 +658,25 @@ function moveZoom(e) {
 	offset.x = -(offset.x * xDifference)
 	offset.y = -(offset.y * yDifference)
 
-	to('.zoom', 0.4, { x: offset.x, y: offset.y }, 'out')
+	to('.zoom', 0.4, {
+		x: offset.x,
+		y: offset.y
+	}, 'out')
 
 	console.log("gaASDF")
 }
 
-function zoomOver() { to('.zoom', 0.6, { alpha: 1 }, 'in') }
-function zoomOut() { to('.zoom', 0.6, { alpha: 0 }, 'in') }
+function zoomOver() {
+	to('.zoom', 0.6, {
+		alpha: 1
+	}, 'in')
+}
+
+function zoomOut() {
+	to('.zoom', 0.6, {
+		alpha: 0
+	}, 'in')
+}
 
 
 
@@ -604,18 +693,24 @@ function navOver(e) {
 		let width = $(e.target).width(),
 			x = $(e.target).offset().left,
 			xContainer = $('.container').offset().left;
-		to('.nav .underline', 0.3, { x: x - xContainer, width: width }, 'backOut')
+		to('.nav .underline', 0.3, {
+			x: x - xContainer,
+			width: width
+		}, 'backOut')
 	}
 }
 
 function navOut(e) {
 	if (doc.mobile) {
 
-	} else {		
+	} else {
 		let width = $(e.target).width(),
 			x = $(e.target).offset().left,
 			xContainer = $('.container').offset().left;
-		to('.nav .underline', 0.2, { x: x - xContainer + (width * 0.5), width: 0 }, 'in', 0.2);
+		to('.nav .underline', 0.2, {
+			x: x - xContainer + (width * 0.5),
+			width: 0
+		}, 'in', 0.2);
 	}
 }
 
@@ -640,9 +735,15 @@ function showCampaign() {
 			height: 'auto',
 			opacity: 1
 		})
-		from('.campaign', 0.2, { alpha: 0 }, 'in')
-		from('.campaign', 0.5, { height: 0 }, 'inOut')
-		to('.campaign img', 0.5, { alpha: 1 }, 'in', 0.1)
+		from('.campaign', 0.2, {
+			alpha: 0
+		}, 'in')
+		from('.campaign', 0.5, {
+			height: 0
+		}, 'inOut')
+		to('.campaign img', 0.5, {
+			alpha: 1
+		}, 'in', 0.1)
 	} else {
 		// trace('MAYBE')
 	}
@@ -654,11 +755,14 @@ function hideCampaign(page) {
 	if (doc.campaignShowing) {
 		doc.campaignShowing = false;
 		to('.campaign', 0.1, {
-			height: 0, onComplete: function () {
+			height: 0,
+			onComplete: function () {
 				$('.campaign').hide();
 			}
 		}, 'in')
-		to('.campaign img', 0.1, { alpha: 0 }, 'out')
+		to('.campaign img', 0.1, {
+			alpha: 0
+		}, 'out')
 	}
 }
 
@@ -667,12 +771,11 @@ function hideCampaign(page) {
 //	POPULATE INSTAGRAM
 //
 //////////////////////////////////////////////////////////////////////
-function populateInstagram(){
+function populateInstagram() {
 	console.log(">> POPULATING INSTA FEED")
-	
+
 	// List of large instagram posts, for slideshow
-	let large = [
-		{
+	let large = [{
 			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/258396f4aaa97e8d4319b33131c0de3f/5B4EB9E0/t51.2885-15/e35/14487234_181259058980118_9038199817582411776_n.jpg',
 			post: 'https://www.instagram.com/p/BK6oeIwjamo/'
 		},
@@ -693,7 +796,7 @@ function populateInstagram(){
 			post: 'https://www.instagram.com/p/BLAGDG5Dxiy/'
 		}
 	]
-	
+
 	// Populate large instagram slideshow
 	large.map(function (post) {
 		newInstagramPost(
@@ -702,10 +805,9 @@ function populateInstagram(){
 			post.post);
 	});
 
-	
+
 	// List of small instagram posts, for slideshow
-	let posts = [
-		{
+	let posts = [{
 			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/38e75874ee23edd2899efd3bfae1ae68/5B6B37FA/t51.2885-15/e35/14145555_1178984125550101_8647239076455383040_n.jpg',
 			post: 'https://instagram.com/p/BNSq_MZDFfe/'
 		},
@@ -738,13 +840,13 @@ function populateInstagram(){
 			post: 'https://instagram.com/p/BM2FwHujxKq/'
 		},
 		{
-			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/233eab862cbc87206a95f899fb6d2cea/5ACEEB05/t51.2885-15/e15/14736181_189624161486237_1789865837503447040_n.jpg',
+			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/a79f5074c2e13dc494b6d7eafd130c70/5AD18E05/t51.2885-15/e15/14736181_189624161486237_1789865837503447040_n.jpg',
 			post: 'https://instagram.com/p/BMRQPX5DNZR/'
-		},
+		}
 	];
 
 	// Populate small instagram posts
-	posts.map(function(post){
+	posts.map(function (post) {
 		newInstagramPost(
 			'section.instagram .posts.small',
 			post.img,
@@ -752,7 +854,7 @@ function populateInstagram(){
 	});
 }
 
-function newInstagramPost(target, imgUrl, postUrl){
+function newInstagramPost(target, imgUrl, postUrl) {
 	const html = `<div class="post slide" style="background-image: url(${imgUrl})">
 		<a href="${postUrl}" target="_blank"></a>
 	</div>`;
@@ -769,7 +871,9 @@ function newInstagramPost(target, imgUrl, postUrl){
 function resizeWindow() {
 	if ($(window).width() < 980) {
 		doc.mobile = true;
-		to('.nav .underline', 0.2, { width: 0 }, 'out');
+		to('.nav .underline', 0.2, {
+			width: 0
+		}, 'out');
 		$('body').addClass('mobile')
 
 	} else {
@@ -779,9 +883,14 @@ function resizeWindow() {
 
 	// set hero to fill window
 	$('.hero').height(Math.round($(window).height() - 100));
-	$('.shop').css({ marginTop: Math.round($(window).height()) })
+	$('.shop').css({
+		marginTop: Math.round($(window).height())
+	})
 
-	function centerElement(el, offset = { x: 0, y: 0 }) {
+	function centerElement(el, offset = {
+		x: 0,
+		y: 0
+	}) {
 		const $el = $(el);
 		const $parent = $el.parent();
 		const x = ($parent.width() - $el.outerWidth()) * 0.5 + offset.x;
@@ -813,8 +922,6 @@ function resizeWindow() {
 	$('section.instagram .posts.large').height(Math.floor(instaPostWidth * 0.33333) * 3);
 	// centerElement('.hero .button')
 	// centerElement('.mobile .hero .button', {x: 0, y: 125})
-
-	initSlideShow('.instagram .posts.large');
 }
 
 
@@ -837,10 +944,16 @@ function onScroll(e) {
 	const filtersHeight = $('.shop .filters').height();
 
 	// Keep store filters in view
-	if (offsetY < shopTop) { set('.shop .filters', { y: 0 }) }
+	if (offsetY < shopTop) {
+		set('.shop .filters', {
+			y: 0
+		})
+	}
 	if (offsetY > shopTop) {
 		if (offsetY < shopTop + shopHeight - filtersHeight - 100) {
-			set('.shop .filters', { y: offsetY - shopTop })
+			set('.shop .filters', {
+				y: offsetY - shopTop
+			})
 		}
 	}
 
@@ -848,29 +961,8 @@ function onScroll(e) {
 		$('.hero').hide();
 	} else {
 		$('.hero').show();
-		set('.hero', { y: offsetY * -0.4 })
+		set('.hero', {
+			y: offsetY * -0.4
+		})
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
