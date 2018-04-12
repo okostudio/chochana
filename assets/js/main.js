@@ -37,7 +37,7 @@ function init() {
 		console.log(data)
 	});
 
-	initSlideShow('.slideshow');
+	initSlideShow('.hero .slideshow');
 
 	from('.promo', 0.3, { alpha: 0 }, 'in', 0.1);
 	from('.nav', 0.3, { alpha: 0 }, 'in', 0.1);
@@ -50,12 +50,12 @@ function init() {
 		loadMapsApi();
 		doc.scroll = window.pageYOffset;
 		trace('window.pageYOffset: ' + window.pageYOffset)
-		$('.campaign').hide();
-		$('.shop').show();
-		$('.stores').show();
-		$('.instagram').show();
-		$('.footer').show();
-		set('.contact', { opacity: 0, display: 'none' })
+		$('section.campaign').hide();
+		$('section.shop').show();
+		$('section.stores').show();
+		$('section.instagram').show();
+		$('section.footer').show();
+		set('section.contact', { opacity: 0, display: 'none' })
 
 		checkUrlQueries();
 	});
@@ -140,7 +140,7 @@ function checkUrlQueries() {
 
 	if (queries.page == "shop" || queries.page == "stores" || queries.page == "instagram") {
 		scrollPageTo('.' + queries.page, 0);
-		from('.' + queries.page, 0.5, { alpha: 0 }, 'in')
+		from('section.' + queries.page, 0.5, { alpha: 0 }, 'in')
 	};
 
 	if (queries.page == "contact") {
@@ -248,33 +248,44 @@ function productClick(e) {
 //	SLIDESHOW CONTROLS
 //
 //////////////////////////////////////////////////////////////////////
-function initSlideShow(el) {
-	var slideShow = {
+function initSlideShow(el, transition="slide") {
+	let slideShow = {
 		container: $(el),
 		length: $(el + ' .slide').length,
 		currentSlide: 1,
 		previousSlide: 1,
-		zIndex: 0
+		zIndex: 0,
+		transition: transition
 	}
 
+	if (slideShow.transition == "slide") {
+		$(el + ' .slide').hide();
+		set($(el + ' .slide'), { x: 0 })
+		$($(el + ' .slide')[slideShow.currentSlide - 1]).show();
+	}
+	
 	function changeSlide() {
-		slideShow.previousSlide = slideShow.currentSlide;
+		console.log(slideShow)
 
-		if (slideShow.currentSlide < slideShow.length) {
-			slideShow.currentSlide++
-		} else {
-			slideShow.currentSlide = 1;
+		if (slideShow.transition == "slide") {
+			const slideWidth = $(el + ' .slide').width();
+			slideShow.previousSlide = slideShow.currentSlide;
+
+			if (slideShow.currentSlide < slideShow.length) {
+				slideShow.currentSlide++
+			} else {
+				slideShow.currentSlide = 1;
+			}
+
+			const newSlide = $(el + ' .slide')[slideShow.currentSlide-1];
+			const oldSlide = $(el + ' .slide')[slideShow.previousSlide-1];
+
+			set(newSlide, { x: 0 })
+			from(newSlide, 1.0, { x: slideWidth }, 'inOut')
+			to(oldSlide, 1.0, { x: -slideWidth }, 'inOut')
+
+			wait(6, changeSlide)
 		}
-
-		const newSlide = el + ' .slide' + (slideShow.currentSlide);
-		const oldSlide = el + ' .slide' + (slideShow.previousSlide);
-
-		set(newSlide, { x: "0%" })
-		from(newSlide, 1.0, { x: "100%" }, 'inOut')
-		to(oldSlide, 1.0, { x: "-100%" }, 'inOut')
-
-		wait(6, changeSlide)
-		// trace('slideShow: ' + slideShow.currentSlide)
 	}
 
 	wait(5, changeSlide)
@@ -397,7 +408,6 @@ function navSelect(e) {
 
 	let page = $(e.target).attr('page');
 	navCollapse();
-	trace('current page: ' + page);
 
 	let scrollDelay = 0;
 
@@ -659,12 +669,41 @@ function hideCampaign(page) {
 //////////////////////////////////////////////////////////////////////
 function populateInstagram(){
 	console.log(">> POPULATING INSTA FEED")
-	// Populate large instagram posts
-	newInstagramPost(
-		'section.instagram .posts.large',
-		'https://instagram.fsyd3-1.fna.fbcdn.net/vp/258396f4aaa97e8d4319b33131c0de3f/5B4EB9E0/t51.2885-15/e35/14487234_181259058980118_9038199817582411776_n.jpg',
-		'https://www.instagram.com/p/BK6oeIwjamo/');
 	
+	// List of large instagram posts, for slideshow
+	let large = [
+		{
+			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/258396f4aaa97e8d4319b33131c0de3f/5B4EB9E0/t51.2885-15/e35/14487234_181259058980118_9038199817582411776_n.jpg',
+			post: 'https://www.instagram.com/p/BK6oeIwjamo/'
+		},
+		{
+			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/90e2c2bf3f2ed815a3f27cc64d3427c9/5B70984E/t51.2885-15/e35/14719704_166423530489267_407969941195587584_n.jpg',
+			post: 'https://www.instagram.com/p/BMZK0hrD0TN/'
+		},
+		{
+			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/b7ab96dd207c104844a719f5352dc964/5B576C33/t51.2885-15/e35/14712281_1025396677582182_2537946903065133056_n.jpg',
+			post: 'https://www.instagram.com/p/BMPVC5zDFwl/'
+		},
+		{
+			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/3a99e155fc21b3d26ce3dd898c578994/5B655A9C/t51.2885-15/e35/14583294_2092760477615696_9005267928207065088_n.jpg',
+			post: 'https://www.instagram.com/p/BLKYsbhjzxh/'
+		},
+		{
+			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/add78b6267183f79ae14a4997108a70b/5B5A3AF6/t51.2885-15/e35/14474028_607885652726079_929269045537013760_n.jpg',
+			post: 'https://www.instagram.com/p/BLAGDG5Dxiy/'
+		}
+	]
+	
+	// Populate large instagram slideshow
+	large.map(function (post) {
+		newInstagramPost(
+			'section.instagram .posts.large',
+			post.img,
+			post.post);
+	});
+
+	
+	// List of small instagram posts, for slideshow
 	let posts = [
 		{
 			img: 'https://instagram.fsyd3-1.fna.fbcdn.net/vp/38e75874ee23edd2899efd3bfae1ae68/5B6B37FA/t51.2885-15/e35/14145555_1178984125550101_8647239076455383040_n.jpg',
@@ -714,7 +753,7 @@ function populateInstagram(){
 }
 
 function newInstagramPost(target, imgUrl, postUrl){
-	const html = `<div class="post" style="background-image: url(${imgUrl})">
+	const html = `<div class="post slide" style="background-image: url(${imgUrl})">
 		<a href="${postUrl}" target="_blank"></a>
 	</div>`;
 	$(target).append(html);
@@ -765,15 +804,19 @@ function resizeWindow() {
 		verticallyCenterProductPage();
 	}
 
-	// resize instagram feed
-	const instaPostWidth = $('section.instagram .posts.large').width();
+	const instaPostWidth = $('.col2').width();
 	$('section.instagram .posts.small').height(instaPostWidth);
 	$('section.instagram .posts.small .post').width(Math.floor(instaPostWidth * 0.33333))
-	$('section.instagram .posts.small .post').height(Math.floor(instaPostWidth * 0.34))
-	$('section.instagram .posts.large').height(Math.floor(instaPostWidth * 0.34) * 3);
+	$('section.instagram .posts.small .post').height(Math.floor(instaPostWidth * 0.33333))
+	$('section.instagram .posts.large .post').width(instaPostWidth);
+	$('section.instagram .posts.large .post').height(Math.floor(instaPostWidth * 0.33333) * 3);
+	$('section.instagram .posts.large').height(Math.floor(instaPostWidth * 0.33333) * 3);
 	// centerElement('.hero .button')
 	// centerElement('.mobile .hero .button', {x: 0, y: 125})
+
+	initSlideShow('.instagram .posts.large');
 }
+
 
 function verticallyCenterProductPage() {
 	const containerHeight = $('.product-page .container').height();

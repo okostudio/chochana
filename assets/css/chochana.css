@@ -109,15 +109,34 @@ section.nav{
 .container{
   position: relative;
   /*background: #fff;*/
-  width: 480px;
+  width: 490px;
   left: 50%;
   margin-left: -240px;
+  clear: both;
 }
 
-.col1{ width: 960px; display: inline-block; box-sizing: border-box; }
-.col2{ width: 480px; display: inline-block; box-sizing: border-box; vertical-align: top;}
-.col3{ width: 320px; display: inline-block; box-sizing: border-box; }
-.col4{ width: 240px; display: inline-block; box-sizing: border-box; }
+.col1,
+.col2,
+.col3,
+.col4{
+  display: inline-block;
+  box-sizing: border-box;
+  overflow: hidden;
+  /* background: RGBA(25,255,25,0.77); */
+}
+
+.col1{ width: 960px; }
+.col2{ 
+  width: 490px;
+  vertical-align: top;
+  float: left;
+}
+.col2:last-child{
+  /* background: red; */
+  /* margin-left: 20px; */
+}
+.col3{ width: 320px; }
+.col4{ width: 240px; }
 
 .row1{ height: 360px;}
 .row2{ height: 720px;}
@@ -558,7 +577,7 @@ section.nav{
 }
 
 .footer .icon.facebook{ background-image: url(../images/icons/facebook.svg) }
-.footer .icon.instagram{ background-image: url(../images/icons/instagram.svg) }
+.footer .icon.instagram{ background-image: url(../images/icons/instagram.svg); display: inline-block;}
 .footer .icon.amex{ background-image: url(../images/icons/amex.svg) }
 .footer .icon.master{ background-image: url(../images/icons/mastercard.svg) }
 .footer .icon.visa{ background-image: url(../images/icons/visa.svg) }
@@ -572,45 +591,65 @@ section.instagram {
   padding: 50px 0 100px 0;
 }
 
-section.instagram h1{
+section.instagram h1 {
   cursor: pointer;
-  margin: 0 0 20px 20px;
+  margin-bottom: 20px;
+}
+
+.mobile section.instagram h1 {
+  margin-left: 20px;
 }
 
 section.instagram .container{
 }
 
-section.instagram .posts{} 
-
-.mobile section.instagram .posts{
+section.instagram .posts{
   position: relative;
-  padding: 0 20px 40px 20px;
   line-height: 0;
   font-size: 0;
   margin: 0;
+  overflow: hidden;
+}
+
+.mobile section.instagram .posts{
+  padding: 0 20px 40px 20px;
+  background: #fafafa;
   clear: both;
+}
+
+.mobile section.instagram .posts::after{
+  position: absolute;
+  content: " ";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: 20px solid #fafafa;
+  box-sizing: border-box;
 }
 
 section.instagram .post {
   position: relative;
   display: block;
-  float: left;
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  
 }
 
-section.instagram .posts.small .post {}
-section.instagram .posts.large .post {}
+section.instagram .posts.small .post {
+  float: left;
+}
+section.instagram .posts.large .post {
+  position: absolute;
+}
 
 section.instagram .post a{
   position: absolute;
   width: 100%;
   height: 100%;
-
 }
 
 
