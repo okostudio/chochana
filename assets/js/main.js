@@ -21,7 +21,7 @@ function init() {
 	// initShop();
 
 	// !!!! DEV MODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	$('body').addClass('dev-mode')
+	// $('body').addClass('dev-mode')
 
 	$.getJSON("/assets/data/data.json", function (data) {
 		//first row "title" column
