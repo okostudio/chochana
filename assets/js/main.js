@@ -311,7 +311,7 @@ function initSlideShow(el, transition) {
 			};
 		}
 
-		wait(3, changeSlide)
+		wait(6, changeSlide)
 	}
 	wait(3, changeSlide)
 }
